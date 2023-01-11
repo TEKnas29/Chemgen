@@ -1,0 +1,188 @@
+<script >
+export default {
+  data() {
+    return {
+      inp: "",
+      opisl:"",
+      opEng:""
+    }
+  },
+  methods:{
+    findChem(){
+      let regex = new RegExp("[A-Z][a-z]?\\d*|\\((?:[^()]*(?:\\(.*\\))?[^()]*)+\\)\\d+", 'gm') // https://stackoverflow.com/questions/23602175/regex-for-parsing-chemical-formulas
+      let reg1 = new RegExp("\'\'",'gm') //to remove double quates
+      let reg2 = new RegExp("\'(.*?)\'",'gm') //values between quotes
+      let reg3 = new RegExp('\\\'(Th|A|It|Be|Wh|De|So)\\\'', 'gm') //exception list 
+      let reg4 = new RegExp('tert', 'gm') 
+      let reg5 = new RegExp('(SN2|sp3|\'SN2\')', 'gm') 
+      // TODO ISL part
+      let inp = this.inp
+
+      let chk1 = inp.replace(regex,function (x) {
+        return `\'${x}\'`
+      })
+      let chk2 = chk1.replace(reg1,'')
+      let chk3 = chk2.replace(reg3,function (s) {
+        let nreg = new RegExp("\'","g")
+        let  z = s.replace(nreg,'')
+        return `${z}`
+      })
+      // ENG  start
+      let chk4 = chk3.replace(reg4,function (t) {
+        return `<i>${t}</i>`
+      })
+      let chk5 = chk4.replace(reg5,function (u) {
+        let nreg = new RegExp("\'","g")
+        let  z = u.replace(nreg,'')
+        return `@${z.toLowerCase()};`
+      })
+      let chk6 = chk5.replace(reg2, function (y){
+        let nreg = new RegExp("\'","g")
+        let  z = y.replace(nreg,'')
+        return `@chem_${z};`
+      })
+      this.opEng = `<text ref=EP_text1>${chk6}</text>`
+      // ENG  end
+      //ISL start
+        let chk7 = chk3.match(reg2)
+        let isl = `<!-- ########CHEMSYMB######### -->\n`;
+        let isl2 = `<!-- ########ANSPRO######### -->\n`;
+        let isl2_temp = ``;
+        let nreg3 = new RegExp("1\,\,","g")
+        let nreg4 = new RegExp("\,\}","g")
+        
+        if (chk7) {
+        chk7.forEach((m)=>{
+          let nreg = new RegExp('[0-9]','gm')
+          let nreg1 = new RegExp("\'","g")
+          let n = m.replace(nreg, function (p) {
+              let q = p.replace(nreg1,'')
+              return `<sub>${q}</sub>`
+            })
+          let i = m.replace(nreg1,'')
+            isl += `<var name=chem_${i} value="<math><font face=chemsymb>${n}</font></math>">\n`
+          
+        })
+        chk7.forEach((n)=>{
+          let nreg = new RegExp('[0-9]','gm')
+          let nreg1 = new RegExp("\'","g")
+          let nreg2 = new RegExp("\,\,","g")
+          let n1 = n.replace(nreg, function (p) {
+              let q = p.replace(nreg1,'')
+              return `,${q},`
+            })
+          let i = n1.replace(nreg1,'')
+          let j = i.replace(nreg2,'\,')
+    
+            isl2_temp += `{${j}}\n`
+
+          
+        }) 
+
+        let k = isl2_temp.replace(regex,function (p) {        
+              return `${p},1,`
+          })
+        let l = k.replace(nreg3,'')
+        let m = l.replace(nreg4,'\}')
+        let n = m.replace('\,)','\}')
+        let o = n.replace('(','\{')
+          isl2 += o
+        this.opisl = isl + isl2
+      }
+      //ISL end
+
+    }
+  }
+}
+</script>
+
+<template>
+  
+  <div class="main">
+    <div class="header">
+      <div class="titlename">
+       <h1>Chemisty Generator</h1> 
+      </div>
+    </div>
+    <hr class="hr">
+    <h2 class="h2">Input</h2>
+    <div class="inp">
+      <div class="inp1">
+        <textarea name="inputArea" id="inputArea" cols="215" rows="10" class="inputArea" autofocus placeholder="Input text here..." v-model="inp" type="text" @input="findChem"></textarea>
+      </div>
+    </div>
+    <div class="op">
+      <div class="op1">
+        <h3>ISL:</h3>
+        <!-- <textarea name="islOp" id="IslOp" cols="100" rows="10" class="opArea" readonly >{{ opisl }}</textarea> -->
+        <pre class="opArea"><code>{{ opisl }}</code></pre>
+      </div>
+      <div class="op2">
+        <h3>English:</h3>
+        <!-- <textarea name="engOp" id="IslOp" cols="100" rows="10" class="opArea" readonly ></textarea> -->
+        <pre class="opArea"><code>{{ opEng }}</code></pre>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.main{
+  background-color: #264653;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+.inputArea{
+  background-color: #4ab1cb;
+  resize: none;
+  border-radius: 10px;
+  font-family: Consolas;
+}
+.opArea > code{
+  font-family: Consolas;
+  white-space: pre-wrap; 
+  word-wrap:normal;
+}
+.op1 ,.op2{
+  background-color: #219EBC;
+  width: 700px;
+  height: 500px;
+  border-radius: 10px;
+  word-wrap:normal;
+}
+.h2{
+  text-align: start;
+  margin: auto 40px;
+}
+.hr{
+  background-color: black;
+  height: 5px;
+}
+.header{
+  text-align: center ;
+  height: 4rem;
+}
+.titlename{
+  font-family: 'Courier New', Courier, monospace;
+  text-align: center;
+  padding-top: 0.5px;
+  width: 350px;
+  margin: auto;
+
+}
+.inp{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+.op{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+}
+
+
+</style>
