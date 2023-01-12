@@ -76,7 +76,6 @@ export default {
     
             isl2_temp += `{${j}}\n`
 
-          
         }) 
 
         let k = isl2_temp.replace(regex,function (p) {        
@@ -123,6 +122,7 @@ export default {
         <pre class="opArea"><code>{{ opEng }}</code></pre>
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -183,6 +183,4 @@ export default {
   flex-wrap: nowrap;
   justify-content: space-evenly;
 }
-
-
 </style>
