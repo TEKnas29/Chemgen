@@ -85,9 +85,9 @@ export default {
               return `<sub>${q}</sub>`
             })
           let i = m.replace(nreg1,'')
+          let j = n.replace(nreg1,'')
 
-            isl1_temp += `<var name=chem_${i} value="<math><font face=chemsymb>${n}</font></math>">\n`
-     
+            isl1_temp += `<var name=chem_${i} value="<math><font face=chemsymb>${j}</font></math>">\n`
             
         })
         chk7.forEach((n)=>{
@@ -146,7 +146,6 @@ export default {
     <div class="op">
       <div class="op1">
         <h3>ISL:</h3>
-        <i>Note: <b>'</b> is left there in output</i><br>
         <i>Note: <b>-/+</b> is not included</i>
         <pre class="opArea"><code>{{ opisl }}</code></pre>
       </div>
