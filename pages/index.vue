@@ -140,7 +140,7 @@ export default {
     <h2 class="h2">Input</h2>
     <div class="inp">
       <div class="inp1">
-        <textarea name="inputArea" id="inputArea" cols="215" rows="10" class="inputArea" autofocus placeholder="Input text here..." v-model="inp" type="text" @input="findChem"></textarea>
+        <textarea name="inputArea" id="inputArea" cols="200" rows="10" class="inputArea" autofocus placeholder="Input text here..." v-model="inp" type="text" @input="findChem"></textarea>
       </div>
     </div>
     <div class="op">
