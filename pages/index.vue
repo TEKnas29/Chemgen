@@ -140,7 +140,7 @@ export default {
     <h2 class="h2">Input</h2>
     <div class="inp">
       <div class="inp1">
-        <textarea name="inputArea" id="inputArea" cols="200" rows="10" class="inputArea" autofocus placeholder="Input text here..." v-model="inp" type="text" @input="findChem"></textarea>
+        <textarea name="inputArea" id="inputArea" class="inputArea" autofocus placeholder="Input text here..." v-model="inp" type="text" @input="findChem"></textarea>
       </div>
     </div>
     <div class="op">
@@ -171,6 +171,8 @@ export default {
   resize: none;
   border-radius: 10px;
   font-family: Consolas;
+  width: 95vw;
+  height: 35vh;
 }
 .opArea > code{
   font-family: Consolas;
