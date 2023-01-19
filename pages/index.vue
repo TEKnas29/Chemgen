@@ -15,12 +15,13 @@ export default {
       let reg3 = new RegExp('\\\'(Th|A|It|Be|Wh|De|So|Fu|Ha|(\. [A-z][A-z]))\\\'', 'gm') //exception list 
       let reg4 = new RegExp('tert', 'gm') 
       let reg5 = new RegExp('(SN2|sp3|\'SN2\')', 'gm') 
-      let reg6 = new RegExp('\\b[0-9]\\b', 'gm') 
+      let reg6 = new RegExp('\\b\\d+\\b', 'gm') //TODO float numbers
       let splchars = new RegExp('(α|β)','gm')
       // TODO ISL part
       let inp = this.inp
 
       let chk1 = inp.replace(regex,function (x) {
+        console.log(x);
         let nreg = new RegExp("^((Ac|Ag|Al|Am|Ar|As|At|Au|B|Ba|Be|Bh|Bi|Bk|Br|C|Ca|Cd|Ce|Cf|Cl|Cm|Co|Cr|Cs|Cu|Ds|Db|Dy|Er|Es|Eu|F|Fe|Fm|Fr|Ga|Gd|Ge|H|He|Hf|Hg|Ho|Hs|I|In|Ir|K|Kr|La|Li|Lr|Lu|Md|Mg|Mn|Mo|Mt|N|Na|Nb|Nd|Ne|Ni|No|Np|O|Os|P|Pa|Pb|Pd|Pm|Po|Pr|Pt|Pu|Ra|Rb|Re|Rf|Rg|Rh|Rn|Ru|S|Sb|Sc|Se|Sg|Si|Sm|Sn|Sr|Ta|Tb|Tc|Te|Th|Ti|Tl|Tm|U|V|W|Xe|Y|Yb|Zn|Zr)\\d*)+$","gm") 
         if(x.match(nreg)){
           return `\'${x}\'`
@@ -54,10 +55,10 @@ export default {
       let chk6b = chk6a.replace(splchars,function (s) {
         switch (s) {
           case 'α':
-              return `@alpha;`
+              return `@userf.disp('&alpha;');`
             break;
           case 'β':
-              return `@beta;`
+              return `@userf.disp('&beta;');`
             break;
         
           default:
