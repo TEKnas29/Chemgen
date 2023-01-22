@@ -1,4 +1,5 @@
 <script >
+
 export default {
   data() {
     return {
@@ -12,31 +13,48 @@ export default {
       let regex = new RegExp("[A-Z][a-z]?\\d*|\\((?:[^()]*(?:\\(.*\\))?[^()]*)+\\)\\d+", 'gm') // https://stackoverflow.com/questions/23602175/regex-for-parsing-chemical-formulas
       let reg1 = new RegExp("\'\'",'gm') //to remove double quates
       let reg2 = new RegExp("\'(.*?)\'",'gm') //values between quotes
-      let reg3 = new RegExp('\\\'(Th|A|It|Be|Wh|De|So|Fu|Ha|(\. [A-z][A-z]))\\\'', 'gm') //exception list 
+      let reg3 = new RegExp('\\\'(Th|A|It|Be|Wh|De|So|Fu|Ha|Ti|As|Ac|(\. [A-z][A-z]))\\\'', 'gm') //exception list 
       let reg4 = new RegExp('tert', 'gm') 
-      let reg5 = new RegExp('(SN2|sp3|\'SN2\')', 'gm') 
+      let reg5 = new RegExp('(SN2)|(sp3)|(\'SN2\')', 'gm') 
       let reg6 = new RegExp('\\b\\d+\\b', 'gm') //TODO float numbers
       let splchars = new RegExp('(α|β)','gm')
       // TODO ISL part
       let inp = this.inp
-
+      
       let chk1 = inp.replace(regex,function (x) {
-        console.log(x);
         let nreg = new RegExp("^((Ac|Ag|Al|Am|Ar|As|At|Au|B|Ba|Be|Bh|Bi|Bk|Br|C|Ca|Cd|Ce|Cf|Cl|Cm|Co|Cr|Cs|Cu|Ds|Db|Dy|Er|Es|Eu|F|Fe|Fm|Fr|Ga|Gd|Ge|H|He|Hf|Hg|Ho|Hs|I|In|Ir|K|Kr|La|Li|Lr|Lu|Md|Mg|Mn|Mo|Mt|N|Na|Nb|Nd|Ne|Ni|No|Np|O|Os|P|Pa|Pb|Pd|Pm|Po|Pr|Pt|Pu|Ra|Rb|Re|Rf|Rg|Rh|Rn|Ru|S|Sb|Sc|Se|Sg|Si|Sm|Sn|Sr|Ta|Tb|Tc|Te|Th|Ti|Tl|Tm|U|V|W|Xe|Y|Yb|Zn|Zr)\\d*)+$","gm") 
+        let nregC = new RegExp("((Ac|Ag|Al|Am|Ar|As|At|Au|B|Ba|Be|Bh|Bi|Bk|Br|C|Ca|Cd|Ce|Cf|Cl|Cm|Co|Cr|Cs|Cu|Ds|Db|Dy|Er|Es|Eu|F|Fe|Fm|Fr|Ga|Gd|Ge|H|He|Hf|Hg|Ho|Hs|I|In|Ir|K|Kr|La|Li|Lr|Lu|Md|Mg|Mn|Mo|Mt|N|Na|Nb|Nd|Ne|Ni|No|Np|O|Os|P|Pa|Pb|Pd|Pm|Po|Pr|Pt|Pu|Ra|Rb|Re|Rf|Rg|Rh|Rn|Ru|S|Sb|Sc|Se|Sg|Si|Sm|Sn|Sr|Ta|Tb|Tc|Te|Th|Ti|Tl|Tm|U|V|W|Xe|Y|Yb|Zn|Zr)\\d*)+","gm") 
+        let nreg1 = new RegExp("\((.*?)\)+[0-9]?","gm")
+        let nregB1 = new RegExp("\\(","gm")
+        let nregB2 = new RegExp("\\)","gm")
         if(x.match(nreg)){
-          return `\'${x}\'`
+          return `'${x}'`
+        }else if(x.match(nreg1)){
+          let y = x.replace(nregB1,'\{')
+          let z = y.replace(nregB2,'\}')
+          let z1 = z.replace(nregC,(x)=>{
+            return `'${x}'`
+          })
+          return `${z1}`
         }else{
           return `${x}`
         }
       })
       let chk2 = chk1.replace(reg1,'')
+      
       let chk3 = chk2.replace(reg3,function (s) {
         let nreg = new RegExp("\'","g")
         let  z = s.replace(nreg,'')
         return `${z}`
       })
       // ENG  start
-      let chk4 = chk3.replace(reg4,function (t) {
+      let nregB3 = new RegExp("\'\\{\'","gm")
+      let nregB4 = new RegExp("\'\\}(\\d)","gm")
+      let chk3a = chk3.replace(nregB3,'')
+      let chk3b = chk3a.replace(nregB4,function (x) {
+        return `${x[2]}'`
+      })
+      let chk4 = chk3b.replace(reg4,function (t) {
         return `<i>${t}</i>`
       })
       let chk5 = chk4.replace(reg5,function (u) {
@@ -69,28 +87,40 @@ export default {
       this.opEng = `<text ref=EP_text1>${chk6b}</text>`
       // ENG  end
       //ISL start
-        let chk7 = chk3.match(reg2)
+        let chk3c = chk3.replace(nregB3,'\(')  
+        let chk3d = chk3c.replace(nregB4,function (x) {
+          return `)${x[2]}'`
+        })         
+        let chk7 = chk3d.match(reg2)
         let isl = `<!-- ########CHEMSYMB######### -->\n`;
         let isl2 = `<!-- ########ANSPRO######### -->\n`;
         let isl1_temp = ``;
         let isl2_temp = ``;
         let nreg3 = new RegExp("1\,\,","g")
         let nreg4 = new RegExp("\,\}","g")
-        
+
         if (chk7) {
         chk7.forEach((m)=>{
           let nreg = new RegExp('[0-9]','gm')
           let nreg1 = new RegExp("\'","gm")
+          let nregB = new RegExp("\\(|\\)","gm")
           let n = m.replace(nreg, function (p) {
               let q = p.replace(nreg1,'')
               return `<sub>${q}</sub>`
             })
+          
           let i = m.replace(nreg1,'')
+          let i1 = i.replace(nregB,'')
           let j = n.replace(nreg1,'')
-
-            isl1_temp += `<var name=chem_${i} value="<math><font face=chemsymb>${j}</font></math>">\n`
-            
+          
+          
+          if(i1.match(reg5)) {  
+              isl1_temp += `<var name=${i1.toLowerCase()} value="<math><font face=text>S<sub>N/sub></font>2</math>">\n`
+          }else{
+                isl1_temp += `<var name=chem_${i1} value="<math><font face=chemsymb>${j}</font></math>">\n`
+              }
         })
+        
         chk7.forEach((n)=>{
           let nreg = new RegExp('[0-9]','gm')
           let nreg1 = new RegExp("\'","g")
@@ -123,10 +153,10 @@ export default {
         this.opisl = isl + isl2
       }
       //ISL end
-
     }
   }
 }
+
 </script>
 
 <template>
@@ -147,7 +177,8 @@ export default {
     <div class="op">
       <div class="op1">
         <h3>ISL:</h3>
-        <i>Note: <b>-/+</b> is not included</i>
+        <i>Note: <b>-/+</b> is not working</i><br>
+        <i>Note: <b>sp<sup>3</sup></b> is only working in English section</i>
         <pre class="opArea"><code>{{ opisl }}</code></pre>
       </div>
       <div class="op2">
