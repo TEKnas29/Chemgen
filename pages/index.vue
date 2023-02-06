@@ -1,3 +1,13 @@
+<!-- TODO List -->
+<!-- 
+sp3 support
++/- support
+Bonds support
+Delta and other symbols support 
+Floating point support
+issue 'row no 31' fix
+-->
+
 <script >
 
 export default {
@@ -13,7 +23,7 @@ export default {
       let regex = new RegExp("[A-Z][a-z]?\\d*|\\((?:[^()]*(?:\\(.*\\))?[^()]*)+\\)\\d+", 'gm') // https://stackoverflow.com/questions/23602175/regex-for-parsing-chemical-formulas
       let reg1 = new RegExp("\'\'",'gm') //to remove double quates
       let reg2 = new RegExp("\'(.*?)\'",'gm') //values between quotes
-      let reg3 = new RegExp('\\\'(Th|A|It|Be|Wh|De|So|Fu|Ha|Ti|As|Ac|(\. [A-z][A-z]))\\\'', 'gm') //exception list 
+      let reg3 = new RegExp('\\\'(Th|A|It|Be|Wh|De|So|Fu|Ha|Ti|As|Ac|In|W|(\. [A-z][A-z]))\\\'', 'gm') //exception list 
       let reg4 = new RegExp('tert', 'gm') 
       let reg5 = new RegExp('(SN2)|(sp3)|(\'SN2\')', 'gm') 
       let reg6 = new RegExp('\\b\\d+\\b', 'gm') //TODO float numbers
@@ -22,8 +32,8 @@ export default {
       let inp = this.inp
       
       let chk1 = inp.replace(regex,function (x) {
-        let nreg = new RegExp("^((Ac|Ag|Al|Am|Ar|As|At|Au|B|Ba|Be|Bh|Bi|Bk|Br|C|Ca|Cd|Ce|Cf|Cl|Cm|Co|Cr|Cs|Cu|Ds|Db|Dy|Er|Es|Eu|F|Fe|Fm|Fr|Ga|Gd|Ge|H|He|Hf|Hg|Ho|Hs|I|In|Ir|K|Kr|La|Li|Lr|Lu|Md|Mg|Mn|Mo|Mt|N|Na|Nb|Nd|Ne|Ni|No|Np|O|Os|P|Pa|Pb|Pd|Pm|Po|Pr|Pt|Pu|Ra|Rb|Re|Rf|Rg|Rh|Rn|Ru|S|Sb|Sc|Se|Sg|Si|Sm|Sn|Sr|Ta|Tb|Tc|Te|Th|Ti|Tl|Tm|U|V|W|Xe|Y|Yb|Zn|Zr)\\d*)+$","gm") 
-        let nregC = new RegExp("((Ac|Ag|Al|Am|Ar|As|At|Au|B|Ba|Be|Bh|Bi|Bk|Br|C|Ca|Cd|Ce|Cf|Cl|Cm|Co|Cr|Cs|Cu|Ds|Db|Dy|Er|Es|Eu|F|Fe|Fm|Fr|Ga|Gd|Ge|H|He|Hf|Hg|Ho|Hs|I|In|Ir|K|Kr|La|Li|Lr|Lu|Md|Mg|Mn|Mo|Mt|N|Na|Nb|Nd|Ne|Ni|No|Np|O|Os|P|Pa|Pb|Pd|Pm|Po|Pr|Pt|Pu|Ra|Rb|Re|Rf|Rg|Rh|Rn|Ru|S|Sb|Sc|Se|Sg|Si|Sm|Sn|Sr|Ta|Tb|Tc|Te|Th|Ti|Tl|Tm|U|V|W|Xe|Y|Yb|Zn|Zr)\\d*)+","gm") 
+        let nreg = new RegExp("^((Ac|Ag|Al|Am|Ar|As|At|Au|B|Ba|Be|Bh|Bi|Bk|Br|C|Ca|Cd|Ce|Cf|Cl|Cm|Co|Cr|Cs|Cu|Ds|Db|Dy|Er|Es|Eu|F|Fe|Fm|Fr|Ga|Gd|Ge|H|He|Hf|Hg|Ho|Hs|I|Ir|K|Kr|La|Li|Lr|Lu|Md|Mg|Mn|Mo|Mt|N|Na|Nb|Nd|Ne|Ni|No|Np|O|Os|P|Pa|Pb|Pd|Pm|Po|Pr|Pt|Pu|Ra|Rb|Re|Rf|Rg|Rh|Rn|Ru|S|Sb|Sc|Se|Sg|Si|Sm|Sn|Sr|Ta|Tb|Tc|Te|Th|Ti|Tl|Tm|Xe|Y|Yb|Zn|Zr)\\d*)+$","gm") 
+        let nregC = new RegExp("((Ac|Ag|Al|Am|Ar|As|At|Au|B|Ba|Be|Bh|Bi|Bk|Br|C|Ca|Cd|Ce|Cf|Cl|Cm|Co|Cr|Cs|Cu|Ds|Db|Dy|Er|Es|Eu|F|Fe|Fm|Fr|Ga|Gd|Ge|H|He|Hf|Hg|Ho|Hs|I|Ir|K|Kr|La|Li|Lr|Lu|Md|Mg|Mn|Mo|Mt|N|Na|Nb|Nd|Ne|Ni|No|Np|O|Os|P|Pa|Pb|Pd|Pm|Po|Pr|Pt|Pu|Ra|Rb|Re|Rf|Rg|Rh|Rn|Ru|S|Sb|Sc|Se|Sg|Si|Sm|Sn|Sr|Ta|Tb|Tc|Te|Th|Ti|Tl|Tm|Xe|Y|Yb|Zn|Zr)\\d*)+","gm") 
         let nreg1 = new RegExp("\((.*?)\)+[0-9]?","gm")
         let nregB1 = new RegExp("\\(","gm")
         let nregB2 = new RegExp("\\)","gm")
@@ -178,6 +188,7 @@ export default {
       <div class="op1">
         <h3>ISL:</h3>
         <i>Note: <b>-/+</b> is not working</i><br>
+        <i>Note: <b>Bonds</b> are not supoorted yet</i><br>
         <i>Note: <b>sp<sup>3</sup></b> is only working in English section</i>
         <pre class="opArea"><code>{{ opisl }}</code></pre>
       </div>
